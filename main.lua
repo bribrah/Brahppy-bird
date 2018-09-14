@@ -3,9 +3,11 @@ push = require "push"
 
 Class = require "class"
 
-require "bird"
+require "Bird"
 
-require "pipe"
+require "Pipe"
+
+require "PipePair"
 
 
 WINDOW_WIDTH = 1280
@@ -28,9 +30,13 @@ local BACKGROUND_LOOPING_POINT = 413
 
 local bird = Bird()
 
-local pipes = {}
+local pipePairs = {}
 
+--spawn timer for spawning pipes
 local spawnTimer = 0
+
+--initialize last recorded Y value for gap placement to base other gaps on
+local lastY = -PIPE_HEIGHT + math.random(80) + 20
 
 function love.load()
 	love.graphics.setDefaultFilter('nearest', 'nearest')
@@ -74,20 +80,37 @@ function love.update(dt)
 	groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt)
 		% VIRTUAL_WIDTH
 
-
+	--spawns a new PipePair if timer goes is past 2 seconds
 	spawnTimer = spawnTimer + dt
 		if spawnTimer > 2 then
-			table.insert(pipes, Pipe())
+			--[[
+			modify last Y coord we placed so pipe gaps arent too far apart
+			no higher than 10 pixels below the top edge of the screen
+			and lower than a gap length of 90pixels from the bottom\
+			--]]
+			local y = math.max(-PIPE_HEIGHT + 10)
+				math.min(lastY + math.random(20, 20), VIRTUAL_HEIGHT - 90 - PIPE_HEIGHT)
+			lastY = y
+
+			table.insert(pipePairs, PipePair(y))
 			spawnTimer = 0
 	end
 
+	--update bird for input and gravity
 	bird:update(dt)
 
-	for k, pipe in pairs(pipes) do
+	--for every pipe in the scene...
+	for k, pipe in pairs(pipePairs) do
 		pipe:update(dt)
-
-		if pipe.x < 0 -pipe.width then
-			table.remove(pipes, k)
+	end
+		--remove and flagged pipes
+		--need second loop rather than deleting in the previous loop because
+		--modifting the table in-place without explicit keys will result in
+		--skipping the next pipe, since all impicit keys (numerical indices) are
+		--automatically down after a table removal
+	for k, pipe in pairs(pipePairs) do
+		if pipe.remove then
+			table.remove(pipePairs, k)
 		end
 	end
 
@@ -98,8 +121,8 @@ function love.draw()
 	push:start()
 	love.graphics.draw(background, -backgroundScroll, 0)
 
-	for k, pipe in pairs(pipes) do
-		pipe:render()
+	for k, pair in pairs(pipePairs) do
+		pair:render()
 	end
 
 	love.graphics.draw(ground, -groundScroll, VIRTUAL_HEIGHT - 16)
