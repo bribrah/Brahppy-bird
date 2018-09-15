@@ -4,7 +4,7 @@
 PipePair = Class{}
 
 --size of gap
-local GAP_HEIGHT = 100
+local GAP_HEIGHT = 90
 
 function PipePair:init(y)
 	--initialize pipes past the end of screen
@@ -31,6 +31,7 @@ function PipePair:update(dt)
 		self.pipes['lower'].x = self.x
 		self.pipes['upper'].x = self.x
 	else
+		self.remove = true
 	end
 end
 function PipePair:render()

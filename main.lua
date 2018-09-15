@@ -38,6 +38,9 @@ local spawnTimer = 0
 --initialize last recorded Y value for gap placement to base other gaps on
 local lastY = -PIPE_HEIGHT + math.random(80) + 20
 
+--way to pause the scrolling activity
+local scrolling = true
+
 function love.load()
 	love.graphics.setDefaultFilter('nearest', 'nearest')
 
@@ -74,34 +77,45 @@ function love.keyboard.wasPressed(key)
 end
 
 function love.update(dt)
-	backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt)
+	if scrolling then
+		backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt)
 		% BACKGROUND_LOOPING_POINT
 
-	groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt)
+		groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt)
 		% VIRTUAL_WIDTH
 
-	--spawns a new PipePair if timer goes is past 2 seconds
-	spawnTimer = spawnTimer + dt
+	 --spawns a new PipePair if timer goes is past 2 seconds
+		spawnTimer = spawnTimer + dt
 		if spawnTimer > 2 then
 			--[[
 			modify last Y coord we placed so pipe gaps arent too far apart
 			no higher than 10 pixels below the top edge of the screen
 			and lower than a gap length of 90pixels from the bottom\
 			--]]
-			local y = math.max(-PIPE_HEIGHT + 10)
-				math.min(lastY + math.random(20, 20), VIRTUAL_HEIGHT - 90 - PIPE_HEIGHT)
+			local y = math.max(-PIPE_HEIGHT + 10,
+				math.min(lastY + math.random(-20, 20), VIRTUAL_HEIGHT - 90 - PIPE_HEIGHT))
 			lastY = y
 
 			table.insert(pipePairs, PipePair(y))
 			spawnTimer = 0
-	end
+		end
 
 	--update bird for input and gravity
 	bird:update(dt)
 
 	--for every pipe in the scene...
-	for k, pipe in pairs(pipePairs) do
-		pipe:update(dt)
+	for k, pair in pairs(pipePairs) do
+		pair:update(dt)
+
+		for l, pipe in pairs(pair.pipes) do
+			if bird:collides(pipe) then
+				--pause game to show collision happened
+				scrolling = false
+			end
+		end
+		if pair.x < -PIPE_WIDTH then
+			pair.remove = true
+		end
 	end
 		--remove and flagged pipes
 		--need second loop rather than deleting in the previous loop because
@@ -113,7 +127,7 @@ function love.update(dt)
 			table.remove(pipePairs, k)
 		end
 	end
-
+end
 	love.keyboard.keysPressed = {}
 end
 
