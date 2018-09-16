@@ -20,6 +20,7 @@ function PlayState:init()
 	self.bird = Bird()
 	self.pipePairs = {}
 	self.timer = 0
+	self.score = 0
 
 	--initialize last recorded Y value for gap placement to base other gaps on
 	self.lastY = -PIPE_HEIGHT + math.random(80) + 20
@@ -46,12 +47,20 @@ function PlayState:update(dt)
 
 	--for every pipe in the scene...
 	for k, pair in pairs(self.pipePairs) do
+		if not pair.scored then
+			if pair.x + PIPE_WIDTH < self.bird.x then
+				self.score = self.score + 1
+				pair.scored = true
+			end
+		end
 		pair:update(dt)
 
 		for l, pipe in pairs(pair.pipes) do
 			if self.bird:collides(pipe) then
 				--pause game to show collision happened
-				gStateMachine:change('gameover')
+				gStateMachine:change('score', {
+					score = self.score
+					})
 			end
 		end
 		if pair.x < -PIPE_WIDTH then
@@ -59,7 +68,9 @@ function PlayState:update(dt)
 		end
 	end
 	if self.bird.y > VIRTUAL_HEIGHT - 15 then
-		gStateMachine:change('gameover')
+		gStateMachine:change('score', {
+			score = self.score
+			})
 	end
 		--remove and flagged pipes
 		--need second loop rather than deleting in the previous loop because
@@ -80,6 +91,9 @@ function PlayState:render()
     for k, pair in pairs(self.pipePairs) do
         pair:render()
     end
+
+    love.graphics.setFont(flappyFont)
+    love.graphics.print('Score: ' .. tostring(self.score), 8, 8)
 
     self.bird:render()
 end

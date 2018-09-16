@@ -13,6 +13,7 @@ require 'StateMachine'
 require 'states/BaseState'
 require 'states/PlayState'
 require 'states/GameOverState'
+require 'states/ScoreState'
 
 
 WINDOW_WIDTH = 1280
@@ -64,7 +65,8 @@ function love.load()
 	--initialize state machine
 	gStateMachine = StateMachine{
 	['gameover'] = function() return GameOverState() end,
-	['play'] = function() return PlayState() end
+	['play'] = function() return PlayState() end,
+	['score'] = function() return ScoreState() end
 }
 	--start state at title screen
 	gStateMachine:change('gameover')
