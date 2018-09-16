@@ -23,8 +23,8 @@ local backgroundScroll = 0
 local ground = love.graphics.newImage('ground.png')
 local groundScroll = 0
 
-local BACKGROUND_SCROLL_SPEED = 30
-local GROUND_SCROLL_SPEED = 60
+local BACKGROUND_SCROLL_SPEED = 40
+local GROUND_SCROLL_SPEED = 80
 
 local BACKGROUND_LOOPING_POINT = 413
 
@@ -93,7 +93,7 @@ function love.update(dt)
 			and lower than a gap length of 90pixels from the bottom\
 			--]]
 			local y = math.max(-PIPE_HEIGHT + 10,
-				math.min(lastY + math.random(-20, 20), VIRTUAL_HEIGHT - 90 - PIPE_HEIGHT))
+				math.min(lastY + math.random(-30, 30), VIRTUAL_HEIGHT - 90 - PIPE_HEIGHT))
 			lastY = y
 
 			table.insert(pipePairs, PipePair(y))

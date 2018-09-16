@@ -4,7 +4,7 @@ Pipe = Class{}
 local PIPE_IMAGE = love.graphics.newImage("pipe.png")
 
 --speed at which pipe scrolls right to left
-PIPE_SPEED = 60
+PIPE_SPEED = 80
 
 --height/width of pipe, globally accessible, values taken from image
 PIPE_HEIGHT = 288
