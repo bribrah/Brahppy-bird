@@ -1,7 +1,7 @@
 Bird = Class{}
 
-local GRAVITY = 15
-local JUMP = -4
+local GRAVITY = 8
+local JUMP = -3
 
 function Bird:init()
 	self.image = love.graphics.newImage('bird.png')

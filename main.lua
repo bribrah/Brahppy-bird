@@ -9,6 +9,11 @@ require "Pipe"
 
 require "PipePair"
 
+require 'StateMachine'
+require 'states/BaseState'
+require 'states/PlayState'
+require 'states/GameOverState'
+
 
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
@@ -35,9 +40,6 @@ local pipePairs = {}
 --spawn timer for spawning pipes
 local spawnTimer = 0
 
---initialize last recorded Y value for gap placement to base other gaps on
-local lastY = -PIPE_HEIGHT + math.random(80) + 20
-
 --way to pause the scrolling activity
 local scrolling = true
 
@@ -46,14 +48,29 @@ function love.load()
 
 	love.window.setTitle("brahppy bird")
 
+	--initializing fonts
+	smallFont = love.graphics.newFont('font.ttf', 8)
+    mediumFont = love.graphics.newFont('flappy.ttf', 14)
+    flappyFont = love.graphics.newFont('flappy.ttf', 28)
+    hugeFont = love.graphics.newFont('flappy.ttf', 56)
+    love.graphics.setFont(flappyFont)
+
 	push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, {
 	vsync = true,
 	fullscreen = false,
 	resizable = true
 
 })
-		math.randomseed(os.time())
-		love.keyboard.keysPressed = {}
+	--initialize state machine
+	gStateMachine = StateMachine{
+	['gameover'] = function() return GameOverState() end,
+	['play'] = function() return PlayState() end
+}
+	--start state at title screen
+	gStateMachine:change('gameover')
+
+	math.randomseed(os.time())
+	love.keyboard.keysPressed = {}
 end
 
 function love.resize(w, h)
@@ -77,72 +94,22 @@ function love.keyboard.wasPressed(key)
 end
 
 function love.update(dt)
-	if scrolling then
-		backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt)
-		% BACKGROUND_LOOPING_POINT
+	backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt)
+	% BACKGROUND_LOOPING_POINT
 
-		groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt)
-		% VIRTUAL_WIDTH
+	groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt)
+	% VIRTUAL_WIDTH
+	
+	gStateMachine:update(dt)
 
-	 --spawns a new PipePair if timer goes is past 2 seconds
-		spawnTimer = spawnTimer + dt
-		if spawnTimer > 2 then
-			--[[
-			modify last Y coord we placed so pipe gaps arent too far apart
-			no higher than 10 pixels below the top edge of the screen
-			and lower than a gap length of 90pixels from the bottom\
-			--]]
-			local y = math.max(-PIPE_HEIGHT + 10,
-				math.min(lastY + math.random(-30, 30), VIRTUAL_HEIGHT - 90 - PIPE_HEIGHT))
-			lastY = y
-
-			table.insert(pipePairs, PipePair(y))
-			spawnTimer = 0
-		end
-
-	--update bird for input and gravity
-	bird:update(dt)
-
-	--for every pipe in the scene...
-	for k, pair in pairs(pipePairs) do
-		pair:update(dt)
-
-		for l, pipe in pairs(pair.pipes) do
-			if bird:collides(pipe) then
-				--pause game to show collision happened
-				scrolling = false
-			end
-		end
-		if pair.x < -PIPE_WIDTH then
-			pair.remove = true
-		end
-	end
-		--remove and flagged pipes
-		--need second loop rather than deleting in the previous loop because
-		--modifting the table in-place without explicit keys will result in
-		--skipping the next pipe, since all impicit keys (numerical indices) are
-		--automatically down after a table removal
-	for k, pipe in pairs(pipePairs) do
-		if pipe.remove then
-			table.remove(pipePairs, k)
-		end
-	end
-end
 	love.keyboard.keysPressed = {}
 end
 
 function love.draw()
 	push:start()
 	love.graphics.draw(background, -backgroundScroll, 0)
-
-	for k, pair in pairs(pipePairs) do
-		pair:render()
-	end
-
+	gStateMachine:render()
 	love.graphics.draw(ground, -groundScroll, VIRTUAL_HEIGHT - 16)
 
-	bird:render()
-
-	
 	push:finish()
 end

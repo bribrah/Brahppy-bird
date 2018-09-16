@@ -3,12 +3,6 @@ Pipe = Class{}
 --image of pipe
 local PIPE_IMAGE = love.graphics.newImage("pipe.png")
 
---speed at which pipe scrolls right to left
-PIPE_SPEED = 80
-
---height/width of pipe, globally accessible, values taken from image
-PIPE_HEIGHT = 288
-PIPE_WIDTH = 70
 
 function Pipe:init(orientation, y)
 	self.x = VIRTUAL_WIDTH
