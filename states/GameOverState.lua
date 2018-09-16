@@ -6,7 +6,7 @@ GameOverState = Class{__includes = BaseState}
 
 function GameOverState:update(dt)
 	if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
-		gStateMachine:change('play')
+		gStateMachine:change('countdown')
 	end
 end
 
@@ -16,4 +16,5 @@ function GameOverState:render()
 
 	love.graphics.setFont(mediumFont)
 	love.graphics.printf('Press enter to start game', 0, 100, VIRTUAL_WIDTH, 'center')
+	love.graphics.printf('use space to jump!', 0, 130, VIRTUAL_WIDTH, 'center')
 end
