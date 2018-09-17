@@ -35,7 +35,7 @@ function PlayState:update(dt)
 			and lower than a gap length of 90pixels from the bottom\
 			--]]
 			local y = math.max(-PIPE_HEIGHT + 10,
-				math.min(self.lastY + math.random(-30, 30), VIRTUAL_HEIGHT - 90 - PIPE_HEIGHT))
+				math.min(self.lastY + math.random(-40, 40), VIRTUAL_HEIGHT - 90 - PIPE_HEIGHT))
 			self.lastY = y
 
 			table.insert(self.pipePairs, PipePair(y))
@@ -68,7 +68,7 @@ function PlayState:update(dt)
 			pair.remove = true
 		end
 	end
-	if self.bird.y > VIRTUAL_HEIGHT - 15 then
+	if self.bird.y > VIRTUAL_HEIGHT - 12 - BIRD_HEIGHT then
 		sounds['explosion']:play()
 		gStateMachine:change('score', {
 			score = self.score

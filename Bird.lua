@@ -1,7 +1,7 @@
 Bird = Class{}
 
-local GRAVITY = 7.5
-local JUMP = -2.1
+local GRAVITY = 8
+local JUMP = -2.6
 
 function Bird:init()
 	self.image = love.graphics.newImage('bird.png')
@@ -19,8 +19,8 @@ function Bird:collides(pipe)
 	--contains some offsets of hitbox to make game a littttleeee easier
 	--both offsets are used to shrink the bounding box to
 	--give players so leeway on collision
-	if (self.x ) + (self.width - 5) >= pipe.x and self.x + 8 <= pipe.x + PIPE_WIDTH then
-		if (self.y ) + (self.height - 5) >= pipe.y and self.y + 8 <= pipe.y + PIPE_HEIGHT then
+	if (self.x ) + (self.width - 5) >= pipe.x and self.x + 6 <= pipe.x + PIPE_WIDTH then
+		if (self.y ) + (self.height - 5) >= pipe.y and self.y + 6 <= pipe.y + PIPE_HEIGHT then
 			return true
 		end
 	else
