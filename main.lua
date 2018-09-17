@@ -31,8 +31,8 @@ local backgroundScroll = 0
 local ground = love.graphics.newImage('ground.png')
 local groundScroll = 0
 
-local BACKGROUND_SCROLL_SPEED = 40
-local GROUND_SCROLL_SPEED = 80
+local BACKGROUND_SCROLL_SPEED = 45
+local GROUND_SCROLL_SPEED = 90
 
 local BACKGROUND_LOOPING_POINT = 413
 

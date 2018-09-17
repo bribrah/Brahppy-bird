@@ -15,7 +15,7 @@ function PipePair:init(y)
 	-- instantiate two pipes that belong to this pair
 	self.pipes = {
 		['upper'] = Pipe('top', self.y),
-		['lower'] = Pipe('bottom', self.y + PIPE_HEIGHT + math.random(75,95))
+		['lower'] = Pipe('bottom', self.y + PIPE_HEIGHT + math.random(70,90))
 	}
 
 	--whether this pipe pair is ready to be removed

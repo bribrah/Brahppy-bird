@@ -3,7 +3,7 @@ When player collides game state should change to game over state ]]
 
 PlayState = Class{__includes = BaseState}
 --speed at which pipe scrolls right to left
-PIPE_SPEED = 80
+PIPE_SPEED = 90
 
 --height/width of pipe, globally accessible, values taken from image
 PIPE_HEIGHT = 288
@@ -35,7 +35,7 @@ function PlayState:update(dt)
 			and lower than a gap length of 90pixels from the bottom\
 			--]]
 			local y = math.max(-PIPE_HEIGHT + 10,
-				math.min(self.lastY + math.random(-40, 40), VIRTUAL_HEIGHT - 90 - PIPE_HEIGHT))
+				math.min(self.lastY + math.random(-50, 50), VIRTUAL_HEIGHT - 90 - PIPE_HEIGHT))
 			self.lastY = y
 
 			table.insert(self.pipePairs, PipePair(y))
