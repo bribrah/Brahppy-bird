@@ -29,7 +29,7 @@ function ScoreState:render()
 	love.graphics.printf('Press enter to Play Again!', 0, 250, VIRTUAL_WIDTH, 'center')
 
 	if self.score < 5 then
-		love.graphics.printf('You Suck!', 0, 85, VIRTUAL_WIDTH, 'center')
+		love.graphics.printf('Your Shit!', 0, 85, VIRTUAL_WIDTH, 'center')
 		love.graphics.draw(poop, VIRTUAL_WIDTH/2 - 64, 110)
 	end
 
