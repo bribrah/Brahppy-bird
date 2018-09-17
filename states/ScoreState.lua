@@ -4,6 +4,9 @@ Transitioned to from from PlayState upon collision]]
 
 ScoreState = Class{__includes = BaseState}
 
+local bronze = love.graphics.newImage('bronze.png')
+local poop = love.graphics.newImage('poop.png')
+
 function ScoreState:enter(params)
 	self.score = params.score
 end
@@ -21,7 +24,17 @@ function ScoreState:render()
 	love.graphics.setFont(mediumFont)
 	love.graphics.printf('Score: ' .. tostring(self.score), 0, 100, VIRTUAL_WIDTH, 'center')
 
-	love.graphics.printf('Press enter to Play Again!', 0, 160, VIRTUAL_WIDTH, 'center')
+	love.graphics.printf('Press enter to Play Again!', 0, 250, VIRTUAL_WIDTH, 'center')
+
+	if self.score < 5 then
+		love.graphics.draw(poop, VIRTUAL_WIDTH/2 - 64, 110)
+	end
+
+	if self.score >= 5 and self.score < 10 then
+		love.graphics.draw(bronze, VIRTUAL_WIDTH/2 - 64, 115)
+	end
+
+
 end
 
 

@@ -28,7 +28,7 @@ end
 function PlayState:update(dt)
 	--spawns a new PipePair if timer goes is past 2 seconds
 		self.timer = self.timer + dt
-		if self.timer > 2 then
+		if self.timer > 3 then
 			--[[
 			modify last Y coord we placed so pipe gaps arent too far apart
 			no higher than 10 pixels below the top edge of the screen
@@ -39,7 +39,7 @@ function PlayState:update(dt)
 			self.lastY = y
 
 			table.insert(self.pipePairs, PipePair(y))
-			self.timer = 0
+			self.timer = math.random(0.0,1.5)
 		end
 
 	--update bird for input and gravity
