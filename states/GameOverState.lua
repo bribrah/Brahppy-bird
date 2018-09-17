@@ -16,5 +16,5 @@ function GameOverState:render()
 
 	love.graphics.setFont(mediumFont)
 	love.graphics.printf('Press enter to start game', 0, 100, VIRTUAL_WIDTH, 'center')
-	love.graphics.printf('use space to jump!', 0, 130, VIRTUAL_WIDTH, 'center')
+	love.graphics.printf('use space or leftmousebutton to jump!', 0, 150, VIRTUAL_WIDTH, 'center')
 end
