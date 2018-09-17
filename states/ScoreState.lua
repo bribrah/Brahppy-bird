@@ -33,7 +33,7 @@ function ScoreState:render()
 		love.graphics.draw(poop, VIRTUAL_WIDTH/2 - 64, 110)
 	end
 
-	if self.score >= 5 and self.score < 10 then
+	if self.score >= 5 and self.score < 10 then                    
 		love.graphics.printf('Bronze!', 0, 85, VIRTUAL_WIDTH, 'center')
 		love.graphics.draw(bronze, VIRTUAL_WIDTH/2 - 64, 115)
 	end
