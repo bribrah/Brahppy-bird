@@ -4,7 +4,7 @@ so the player can et ready. transitions to play state at countdown = 0]]
 CountDownState = Class{__includes = BaseState}
 
 --takes 1 second to count down each time
-COUNTDOWN_TIME = 0.75
+COUNTDOWN_TIME = .75
 
 function CountDownState:init()
 	self.count = 3

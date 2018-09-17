@@ -24,9 +24,9 @@ function Bird:collides(pipe)
 		if (self.y +2) + (self.height - 4) >= pipe.y and self.y + 2 <= pipe.y + PIPE_HEIGHT then
 			return true
 		end
+	else
+		return false
 	end
-	
-	return false
 end
 
 
@@ -35,6 +35,7 @@ function Bird:update(dt)
 
 	if love.keyboard.wasPressed('space') then
 		self.dy = JUMP
+		sounds['jump']:play()
 	end
 
 	self.y = self.y + self.dy
